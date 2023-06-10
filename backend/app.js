@@ -9,6 +9,7 @@ const dotenv = require('dotenv');
 
 // Import all routes
 const auth = require('./routes/auth.routes');
+const travel = require('./routes/travel.routes');
 const errorMiddleware = require('./middlewares/errors');
 dotenv.config({});
 
@@ -22,6 +23,7 @@ app.use(fileUpload());
 
 // routes
 app.use('/v1/auth', auth);
+app.use('/v1/travel', travel);
 
 // Middleware to handle errors
 app.use(errorMiddleware);

@@ -88,12 +88,10 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 // Updated / Change profile  => /api/v1/me/profile
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
-  const newUserData = {
-    name: req.body.name,
-    email: req.body.email,
-  };
-
-  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+  if (req.body.email) {
+    return res.status(400).send({ success: false, message: "Email can't editable." });
+  }
+  const user = await User.findByIdAndUpdate(req.user.id, req.body, {
     new: true,
     runValidators: true,
     useFindAndModify: false,

@@ -34,11 +34,10 @@ const userSchema = new mongoose.Schema({
     minlength: [10, 'Phone no. must be at least 10 numbers'],
     maxlength: [15, 'Phone no. cannot extends 15 numbers'],
   },
-  // role: {
-  //   type: String,
-  //   default: 'employee',
-  //   enum: ['employee', 'manager'],
-  // },
+  age: {
+    type: Number,
+    required: [true, 'Age is required'],
+  },
   createdAt: { type: Date, default: Date.now },
   country: {
     type: String,
