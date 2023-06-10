@@ -12,6 +12,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const appReducer = combineReducers({
   dummy: () => 'dummy',
+  app: AppReducers,
+  auth: AuthReducers,
 });
 
 const rootReducer = (state, action) => {

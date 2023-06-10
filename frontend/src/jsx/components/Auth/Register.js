@@ -4,16 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
+import { toast } from 'react-toastify';
 
 import '../../../assets/css/auth.css';
-// import { registerUser } from '../../../store/actions/AuthActions';
+
+import { registerUser } from '../../../store/actions/AuthActions';
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // states
-  const [errors, setErrors] = useState({});
   const [data, setData] = useState({ role: 'employee' });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -23,31 +24,17 @@ const Register = () => {
   const handleChange = e => {
     console.log('evalue', e);
     setData({ ...data, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: null });
-    delete errors?.[e.target.name];
   };
 
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (!data.password) {
-      return setErrors({ ...errors, password: 'Password is required' });
-    } else if (data.password.length < 8 || data.password.length >= 20) {
-      return setErrors({
-        ...errors,
-        password: 'Password length should be between 8 and 20 characters',
-      });
-    }
-
     if (data.password !== data.confirmPassword) {
-      return setErrors({
-        ...errors,
-        confirmPassword: 'Password and confirm password should be the same.',
-      });
+      return toast.error('Password and confirm password should be the same.');
     }
 
     console.log('data', data);
-    // dispatch(registerUser(data, navigate));
+    dispatch(registerUser(data, navigate));
   };
 
   return (
@@ -59,13 +46,13 @@ const Register = () => {
             <div className='col-12 col-lg-6'>
               <Form.Group className='mb-3 ' controlId='formBasicEmail'>
                 <Form.Label>
-                  First Name<span className='text-danger'>*</span>
+                  Full Name<span className='text-danger'>*</span>
                 </Form.Label>
                 <Form.Control
                   type='text'
-                  placeholder='Enter your first name'
-                  name='fname'
-                  value={data?.['fname']}
+                  placeholder='Enter your full name'
+                  name='name'
+                  value={data?.['name']}
                   onChange={handleChange}
                   required
                 />
@@ -74,12 +61,47 @@ const Register = () => {
 
             <div className='col-12 col-lg-6'>
               <Form.Group className='mb-3 ' controlId='formBasicEmail'>
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>
+                  Email<span className='text-danger'>*</span>
+                </Form.Label>
                 <Form.Control
-                  type='text'
-                  placeholder='Enter your first name'
-                  name='lname'
-                  value={data?.['lname']}
+                  type='email'
+                  placeholder='Enter your email'
+                  name='email'
+                  value={data?.['email']}
+                  required
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Contact number<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='number'
+                  placeholder='Enter your mobile number'
+                  name='phone'
+                  value={data?.['phone']}
+                  required
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Age<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='number'
+                  placeholder='Enter your age'
+                  name='age'
+                  value={data?.['age']}
+                  required
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -113,19 +135,15 @@ const Register = () => {
             </div>
 
             <div className='col-12 col-lg-6'>
-              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
-                <Form.Label>
-                  Email<span className='text-danger'>*</span>
-                </Form.Label>
+              <Form.Group className='mb-3' controlId='formBasicPassword'>
+                <Form.Label>Occupation</Form.Label>
                 <Form.Control
-                  type='email'
-                  placeholder='Enter your email'
-                  name='email'
-                  value={data?.['email']}
-                  required
+                  type='text'
+                  placeholder='Password'
+                  name='occupation'
+                  value={data?.['occupation']}
                   onChange={handleChange}
                 />
-                {errors?.email && <span className='text-danger'>{errors?.['email']}</span>}
               </Form.Group>
             </div>
 
@@ -144,7 +162,6 @@ const Register = () => {
                 <div className='eye_icon' onClick={() => setShowPassword(!showPassword)}>
                   {showPassword ? <EyeSlashFill /> : <EyeFill />}
                 </div>
-                {errors?.password && <span className='text-danger'>{errors?.['password']}</span>}
               </Form.Group>
             </div>
 
@@ -161,26 +178,89 @@ const Register = () => {
                   required
                   onChange={handleChange}
                 />
-                {errors?.confirmPassword && (
-                  <span className='text-danger'>{errors?.['confirmPassword']}</span>
-                )}
               </Form.Group>
             </div>
 
-            <Form.Group className='mb-3' controlId='formBasicPassword'>
-              <Form.Label>
-                User Type<span className='text-danger'>*</span>
-              </Form.Label>
-              <Form.Select
-                aria-label='Default select example'
-                onChange={e => setData({ ...data, role: e.target.value })}
-                required
-                value={data?.['role']}
-              >
-                <option value='employee'>Employee</option>
-                <option value='manager'>Manager</option>
-              </Form.Select>
-            </Form.Group>
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  City<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter your city'
+                  name='city'
+                  value={data?.['city']}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  State<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter your state'
+                  name='state'
+                  value={data?.['state']}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Country<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter your country'
+                  name='country'
+                  value={data?.['country']}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Pincode<span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Control
+                  type='text'
+                  placeholder='Enter your pincode'
+                  name='pincode'
+                  value={data?.['pincode']}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Address<span className='text-danger'>*</span>
+                </Form.Label>
+                <textarea
+                  className='form-control'
+                  id='exampleFormControlTextarea1'
+                  rows='3'
+                  name='address'
+                  value={data?.['address']}
+                  onChange={handleChange}
+                  required
+                />
+              </Form.Group>
+            </div>
 
             <div className='col-12 col-lg-6 mx-auto'>
               <button className='login_btn my-3 mt-4' type='submit'>

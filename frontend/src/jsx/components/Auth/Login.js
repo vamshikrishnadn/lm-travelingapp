@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 
 import '../../../assets/css/auth.css';
-// import { loginUser } from '../../../store/actions/AuthActions';
+import { loginUser } from '../../../store/actions/AuthActions';
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -37,14 +37,14 @@ const Login = () => {
 
     if (!data.password) {
       return setErrors({ ...errors, password: 'Password is required' });
-    } else if (data.password.length < 8 || data.password.length >= 20) {
+    } else if (data.password.length < 5 || data.password.length >= 20) {
       return setErrors({
         ...errors,
-        password: 'Password length should be between 8 and 20 characters',
+        password: 'Password length should be between 5 and 20 characters',
       });
     }
 
-    // dispatch(loginUser(data, navigate));
+    dispatch(loginUser(data, navigate));
   };
 
   return (

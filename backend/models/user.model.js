@@ -59,6 +59,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  occupation: {
+    type: String,
+  },
 });
 
 // Encrypting password before saving
