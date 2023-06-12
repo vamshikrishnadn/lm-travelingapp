@@ -21,7 +21,7 @@ function NavBar() {
 
   return (
     <>
-      <Navbar bg='primary' expand='lg'>
+      <Navbar bg='primary' expand='lg' fixed='top'>
         <Container>
           <Navbar.Brand>
             <Link to='/dashboard' className='text-white text-decoration-none'>
@@ -38,6 +38,7 @@ function NavBar() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <div style={{ height: '9vh' }} />
     </>
   );
 }

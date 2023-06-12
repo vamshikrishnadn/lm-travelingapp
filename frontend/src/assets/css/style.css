@@ -9,6 +9,9 @@ body {
   background: #f8f8f8;
 }
 
+.sidebar {
+}
+
 .sidebar .list-group-item:first-child {
   border-top-left-radius: 0px !important;
   border-top-right-radius: 0px !important;
@@ -26,4 +29,21 @@ body {
 .container_box {
   width: 90%;
   margin: auto;
+}
+
+.side_sticky {
+  position: fixed;
+  width: 200px;
+  height: 90vh !important;
+  overflow-y: scroll;
+}
+
+@media only screen and (max-width: 768px) {
+  .side_sticky {
+    position: relative;
+    /* z-index: 100; */
+    width: 100%;
+    height: auto !important;
+    overflow-y: scroll;
+  }
 }

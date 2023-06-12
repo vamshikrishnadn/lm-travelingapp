@@ -24,6 +24,14 @@ const SideBar = () => {
         >
           Create travel
         </Link>
+        <Link
+          to='/travel/my'
+          class={`list-group-item list-group-item-action ${
+            pathname === '/travel/my' ? 'active' : ''
+          }`}
+        >
+          My travel
+        </Link>
       </div>
     </>
   );

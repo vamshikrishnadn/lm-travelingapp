@@ -4,16 +4,15 @@ import thunk from 'redux-thunk';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import AuthReducers from './AuthReducers';
 import AppReducers from './AppReducers';
-import DepartmentReducers from './DepartmentReducers';
-import QueryReducers from './QueryReducers';
+import TravelReducers from './TravelReducers';
 
 const middleware = applyMiddleware(thunk);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const appReducer = combineReducers({
-  dummy: () => 'dummy',
   app: AppReducers,
   auth: AuthReducers,
+  travel: TravelReducers,
 });
 
 const rootReducer = (state, action) => {

@@ -30,6 +30,13 @@ exports.editTravel = catchAsyncErrors(async (req, res, next) => {
   res.status(201).json({ success: true, payload: travel });
 });
 
+exports.getTravelDetails = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const travel = await Travel.findById(id).populate('createdBy');
+
+  res.status(201).json({ success: true, payload: travel });
+});
+
 exports.deleteTravel = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   await Travel.findByIdAndDelete(id);
