@@ -23,3 +23,5 @@ export const deleteMyTravels = (token, id) =>
   axios.delete(`${travelUrl}/delete/${id}`, config(token));
 export const getSingleTravels = (token, id) =>
   axios.get(`${travelUrl}/single/${id}`, config(token));
+export const postSendTravelRequest = (token, values) =>
+  axios.post(`${travelUrl}/request`, values, config(token));

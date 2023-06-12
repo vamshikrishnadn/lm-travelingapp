@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppCard from '../../layouts/AppCard';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createTravel, otherTravels } from '../../../store/actions/TravelActions';
 import AppLoader from '../../layouts/AppLoader';
 import moment from 'moment';
+import { EyeFill } from 'react-bootstrap-icons';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Dashboard = () => {
     'Travel Date',
     'Travel Time',
     'Setter',
+    'Actions',
   ];
 
   // selectors
@@ -65,6 +67,11 @@ const Dashboard = () => {
                     <td className='text-capitalize'>{moment(travel?.travelDate).format('ll')}</td>
                     <td className=''>{`${travel?.travelTime?.from} to ${travel?.travelTime?.to}`}</td>
                     <td className=''>{`${travel?.setter}`}</td>
+                    <td className=''>
+                      <Link to={`/travel/request/${travel?._id}`} className='btn btn-primary pt-0'>
+                        <EyeFill />
+                      </Link>
+                    </td>
                   </tr>
                 ))
               )}

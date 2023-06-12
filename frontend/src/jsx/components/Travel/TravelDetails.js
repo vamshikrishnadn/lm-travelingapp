@@ -2,13 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AppCard from '../../layouts/AppCard';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { createTravel, editTravel, singleTravel } from '../../../store/actions/TravelActions';
+import {
+  createTravel,
+  editTravel,
+  sendTravelRequest,
+  singleTravel,
+} from '../../../store/actions/TravelActions';
 import moment from 'moment';
 import AppLoader from '../../layouts/AppLoader';
 
 const TravelDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   // states
   const [travels, setTravels] = useState();
@@ -42,10 +49,30 @@ const TravelDetails = () => {
     }
   }, [travel]);
 
+  const handleSendRequest = () => {
+    dispatch(
+      sendTravelRequest(
+        token,
+        {
+          requestedTo: travel?.createdBy._id,
+          travel: id,
+        },
+        navigate
+      )
+    );
+  };
+
   return travel ? (
     <>
       <AppCard>
-        <h4 className='mb-4 text-primary'>Travel Details</h4>
+        <div className='d-flex justify-content-between'>
+          <h4 className='mb-4 text-primary'>Travel Details</h4>
+          {location?.pathname.includes('/request/') && (
+            <button className='btn btn-success my-auto' onClick={handleSendRequest}>
+              Send request
+            </button>
+          )}
+        </div>
         <div className='row'>
           {travels &&
             Object.keys(travels)?.map((key, i) => (

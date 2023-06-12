@@ -23,6 +23,7 @@ const App = () => {
           <Route path='/travel/create' element={<CreateTravel />} />;
           <Route path='/travel/edit/:id' element={<CreateTravel />} />;
           <Route path='/travel/view/:id' element={<TravelDetails />} />;
+          <Route path='/travel/request/:id' element={<TravelDetails />} />;
           <Route path='/travel/my' element={<MyTravels />} />;
           <Route path='/login' element={<Login />} />;
           <Route path='*' element={<Navigate to='/dashboard' replace />} />

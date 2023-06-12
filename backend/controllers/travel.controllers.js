@@ -2,6 +2,7 @@ const Travel = require('../models/travel.model.js');
 const TravelRequests = require('../models/travel.request.model.js');
 const TravelReview = require('../models/travel.review.model.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
+const ErrorHandler = require('../utils/errorHandler');
 const moment = require('moment');
 
 exports.createTravel = catchAsyncErrors(async (req, res, next) => {
@@ -47,7 +48,7 @@ exports.deleteTravel = catchAsyncErrors(async (req, res, next) => {
 exports.otherTravels = catchAsyncErrors(async (req, res, next) => {
   const travels = await Travel.find({
     createdBy: { $nin: [req.user._id] },
-    travelDate: { $gte: moment().format() },
+    travelDate: { $lte: moment().format() },
   }).populate('createdBy');
 
   res.status(201).json({ success: true, payload: travels });
@@ -62,6 +63,13 @@ exports.myTravels = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.sendRequest = catchAsyncErrors(async (req, res, next) => {
+  const findTravel = await TravelRequests.find({
+    ...req.body,
+    requestedBy: req.user._id,
+  });
+  if (findTravel) {
+    return next(new ErrorHandler('Request already sent.', 401));
+  }
   const travel = await TravelRequests.create({
     ...req.body,
     requestedBy: req.user._id,

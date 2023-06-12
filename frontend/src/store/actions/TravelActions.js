@@ -6,6 +6,7 @@ import {
   deleteMyTravels,
   editMyTravels,
   getSingleTravels,
+  postSendTravelRequest,
 } from '../services/TravelServices';
 import { buttonLoader } from './AppActions';
 
@@ -102,6 +103,21 @@ export const singleTravel = (token, id) => dispatch => {
     })
     .catch(error => {
       console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const sendTravelRequest = (token, values, navigate) => dispatch => {
+  postSendTravelRequest(token, values)
+    .then(res => {
+      toast.success('Request sent successfully.');
+      navigate('/dashboard');
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
       console.log(error);
       return;
     });
