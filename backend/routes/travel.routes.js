@@ -30,6 +30,7 @@ router.route('/review/create').post(isAuthenticatedUser, createTravelReview);
 router.route('/review/get/my').get(isAuthenticatedUser, getMyTravelReviews);
 router.route('/review/get/:id').get(isAuthenticatedUser, getTravelReview);
 router.route('/single/:id').get(isAuthenticatedUser, getTravelDetails);
+router.route('/edit/:id').patch(isAuthenticatedUser, editTravel);
 router.route('/request/get/:id').get(isAuthenticatedUser, getSingTravelRequest);
 router.route('/delete/:id').delete(isAuthenticatedUser, deleteTravel);
 
