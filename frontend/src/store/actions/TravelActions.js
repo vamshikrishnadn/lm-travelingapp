@@ -7,6 +7,8 @@ import {
   editMyTravels,
   getSingleTravels,
   postSendTravelRequest,
+  getRequestedTravels,
+  editMyTravelStatus,
 } from '../services/TravelServices';
 import { buttonLoader } from './AppActions';
 
@@ -116,6 +118,40 @@ export const sendTravelRequest = (token, values, navigate) => dispatch => {
       return;
     })
     .catch(error => {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+      console.log(error);
+      return;
+    });
+};
+
+export const requestedTravels = token => dispatch => {
+  getRequestedTravels(token)
+    .then(res => {
+      dispatch({
+        type: 'REQUESTED_TRAVELS',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const editTravelStatus = (token, values, id, navigate) => dispatch => {
+  dispatch(buttonLoader(true));
+  editMyTravelStatus(token, values, id)
+    .then(res => {
+      dispatch(buttonLoader(false));
+      toast.success('Successfully updated.');
+      navigate('/travel/requests');
+      return;
+    })
+    .catch(error => {
+      dispatch(buttonLoader(false));
       console.error(error);
       toast.error(error?.response?.data?.message);
       console.log(error);

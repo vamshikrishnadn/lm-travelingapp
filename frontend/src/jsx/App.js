@@ -10,6 +10,7 @@ import SideBar from './layouts/SideBar';
 import CreateTravel from './components/Travel/CreateTravel';
 import MyTravels from './components/Travel/MyTravels';
 import TravelDetails from './components/Travel/TravelDetails';
+import TravelRequests from './components/Travel/TravelRequests';
 
 const App = () => {
   // selectors
@@ -21,9 +22,11 @@ const App = () => {
         <>
           <Route path='/dashboard' element={<Dashboard />} />;
           <Route path='/travel/create' element={<CreateTravel />} />;
+          <Route path='/travel/requests' element={<TravelRequests />} />;
           <Route path='/travel/edit/:id' element={<CreateTravel />} />;
           <Route path='/travel/view/:id' element={<TravelDetails />} />;
-          <Route path='/travel/request/:id' element={<TravelDetails />} />;
+          <Route path='/travel/request/send/:id' element={<TravelDetails />} />;
+          <Route path='/travel/request/received/:id' element={<TravelDetails />} />;
           <Route path='/travel/my' element={<MyTravels />} />;
           <Route path='/login' element={<Login />} />;
           <Route path='*' element={<Navigate to='/dashboard' replace />} />

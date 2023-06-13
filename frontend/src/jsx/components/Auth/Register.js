@@ -22,7 +22,6 @@ const Register = () => {
   const { btnLoader } = useSelector(state => state.app);
 
   const handleChange = e => {
-    console.log('evalue', e);
     setData({ ...data, [e.target.name]: e.target.value });
   };
 

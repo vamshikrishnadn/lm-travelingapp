@@ -102,7 +102,7 @@ const CreateTravel = ({ match }) => {
     if (id && travel) {
       setData({
         ...travel,
-        travelDate: moment(location?.travelDate).format('YYYY-MM-DD'),
+        travelDate: moment(travel?.travelDate).format('YYYY-MM-DD'),
         startTime: travel?.travelTime?.from.split(':')?.[0],
         endTime: travel?.travelTime?.to.split(':')?.[0],
         startMode: travel?.travelTime?.from.split(':')?.[1],

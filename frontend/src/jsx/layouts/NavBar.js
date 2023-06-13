@@ -14,6 +14,7 @@ function NavBar() {
   const navigate = useNavigate();
 
   const [links, setLinks] = useState([]);
+  const { user } = useSelector(state => state.auth?.authDetails);
 
   const logout = () => {
     dispatch(handleLogout(navigate));
@@ -31,6 +32,7 @@ function NavBar() {
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav' className='justify-content-end'>
             <Nav className='mr-auto'>
+              {user?.name && <Nav.Link className='text-light'>Hi, {user?.name}</Nav.Link>}
               <Nav.Link className='text-light' onClick={logout}>
                 Logout
               </Nav.Link>

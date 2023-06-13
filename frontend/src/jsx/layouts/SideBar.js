@@ -10,7 +10,7 @@ const SideBar = () => {
       <div class='list-group'>
         <Link
           to='/dashboard'
-          class={`list-group-item list-group-item-action ${
+          class={`list-group-item list-group-item-action text-capitalize ${
             pathname === '/dashboard' ? 'active' : ''
           }`}
         >
@@ -18,7 +18,7 @@ const SideBar = () => {
         </Link>
         <Link
           to='/travel/create'
-          class={`list-group-item list-group-item-action ${
+          class={`list-group-item list-group-item-action text-capitalize ${
             pathname === '/travel/create' ? 'active' : ''
           }`}
         >
@@ -26,11 +26,19 @@ const SideBar = () => {
         </Link>
         <Link
           to='/travel/my'
-          class={`list-group-item list-group-item-action ${
+          class={`list-group-item list-group-item-action text-capitalize ${
             pathname === '/travel/my' ? 'active' : ''
           }`}
         >
-          My travel
+          My travels
+        </Link>
+        <Link
+          to='/travel/requests'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/travel/requests' ? 'active' : ''
+          }`}
+        >
+          Travel requests
         </Link>
       </div>
     </>

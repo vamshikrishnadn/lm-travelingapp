@@ -15,6 +15,11 @@ export default (state = {}, action) => {
         ...state,
         singleTravel: { ...action.payload },
       };
+    case 'REQUESTED_TRAVELS':
+      return {
+        ...state,
+        requestedTravels: [...action.payload],
+      };
 
     default:
       return state;

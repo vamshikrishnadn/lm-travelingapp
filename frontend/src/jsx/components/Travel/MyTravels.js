@@ -42,7 +42,12 @@ const MyTravels = () => {
   return travels ? (
     <>
       <AppCard>
-        <h4 className='mb-4 text-primary'>Travels Created</h4>
+        <div className='d-flex justify-content-between'>
+          <h4 className='mb-4 text-primary'>Travels Created</h4>
+          <Link to='/travel/create' className='btn btn-success my-auto'>
+            Create new
+          </Link>
+        </div>
 
         <div className='table-responsive'>
           <table className='table table-striped table-hover'>
