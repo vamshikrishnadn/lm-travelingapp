@@ -69,7 +69,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
-  res.status(200).json({ success: true, user });
+  res.status(200).json({ success: true, payload: user });
 });
 
 // Updated / Change password  => /api/v1/password/update

@@ -14,6 +14,8 @@ import TravelRequests from './components/Travel/TravelRequests';
 import SentRequests from './components/Travel/SentRequests';
 import CommentTravel from './components/Travel/CommentTravel';
 import MyReviews from './components/Travel/MyReviews';
+import UpdatePassword from './components/Auth/UpdatePassword';
+import UpdateProfile from './components/Auth/UpdateProfile';
 
 const App = () => {
   // selectors
@@ -29,6 +31,8 @@ const App = () => {
           <Route path='/travel/sent' element={<SentRequests />} />;
           <Route path='/travel/comment' element={<CommentTravel />} />;
           <Route path='/travel/reviews' element={<MyReviews />} />;
+          <Route path='/update/password' element={<UpdatePassword />} />;
+          <Route path='/update/profile' element={<UpdateProfile />} />;
           <Route path='/travel/edit/:id' element={<CreateTravel />} />;
           <Route path='/travel/view/:id' element={<TravelDetails />} />;
           <Route path='/travel/request/send/:id' element={<TravelDetails />} />;

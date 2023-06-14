@@ -107,7 +107,7 @@ const CommentTravel = () => {
             </div>
           </div>
 
-          <button className='btn btn-primary'>
+          <button className='btn btn-primary' type='submit'>
             {' '}
             {btnLoader ? <Spinner animation='border' size='sm' /> : 'Submit'}
           </button>

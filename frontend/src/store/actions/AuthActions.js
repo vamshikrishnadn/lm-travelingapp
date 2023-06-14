@@ -1,5 +1,11 @@
 import { toast } from 'react-toastify';
-import { signupService, signinService } from '../services/AuthServices';
+import {
+  signupService,
+  signinService,
+  updateUserPassword,
+  getUserDetails,
+  updateUserProfile,
+} from '../services/AuthServices';
 import { buttonLoader } from './AppActions';
 
 export const registerUser = (formValues, navigate) => dispatch => {
@@ -50,4 +56,55 @@ export const handleLogout = navigate => dispatch => {
   });
   navigate('/');
   return toast.success('Logged out successfully');
+};
+
+export const updatePassword = (formValues, token, navigate) => dispatch => {
+  dispatch(buttonLoader(true));
+  updateUserPassword(formValues, token)
+    .then(res => {
+      dispatch(buttonLoader(false));
+
+      navigate('/dashboard');
+
+      return toast.success('Successfully updated.');
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      dispatch(buttonLoader(false));
+      return toast.error(error?.response?.data?.message);
+    });
+};
+
+export const updateProfile = (formValues, token, navigate) => dispatch => {
+  dispatch(buttonLoader(true));
+  updateUserProfile(formValues, token)
+    .then(res => {
+      dispatch(buttonLoader(false));
+
+      navigate('/dashboard');
+      dispatch(userDetails(token));
+      return toast.success('Successfully updated.');
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      dispatch(buttonLoader(false));
+      return toast.error(error?.response?.data?.message);
+    });
+};
+
+export const userDetails = token => dispatch => {
+  getUserDetails(token)
+    .then(res => {
+      return dispatch({
+        type: 'PROFILE_DETAILS',
+        payload: res.data.payload,
+      });
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
 };

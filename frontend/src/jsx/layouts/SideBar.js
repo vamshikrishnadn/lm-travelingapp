@@ -1,9 +1,18 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { handleLogout } from '../../store/actions/AuthActions';
 
 const SideBar = () => {
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { pathname } = location;
+
+  const logout = () => {
+    dispatch(handleLogout(navigate));
+  };
 
   return (
     <>
@@ -64,6 +73,31 @@ const SideBar = () => {
         >
           My Reviews
         </Link>
+        <Link
+          to='/update/password'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/update/password' ? 'active' : ''
+          }`}
+        >
+          Update Password
+        </Link>
+        <Link
+          to='/update/profile'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/update/profile' ? 'active' : ''
+          }`}
+        >
+          Update profile
+        </Link>
+        <a
+          href='#'
+          onClick={logout}
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/update/profile' ? 'active' : ''
+          }`}
+        >
+          Logout
+        </a>
       </div>
     </>
   );

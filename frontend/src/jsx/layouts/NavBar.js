@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { handleLogout } from '../../store/actions/AuthActions';
+import { handleLogout, userDetails } from '../../store/actions/AuthActions';
 import AppModal from './AppModal';
 import moment from 'moment';
 
@@ -14,7 +14,14 @@ function NavBar() {
   const navigate = useNavigate();
 
   const [links, setLinks] = useState([]);
-  const { user } = useSelector(state => state.auth?.authDetails);
+  // const { user } = useSelector(state => state.auth?.authDetails);
+  const { token } = useSelector(state => state.auth?.authDetails);
+  const user = useSelector(state => state.auth?.profile);
+  console.log('🚀 ~ file: NavBar.js:20 ~ NavBar ~ user:', user);
+
+  useEffect(() => {
+    dispatch(userDetails(token));
+  }, []);
 
   const logout = () => {
     dispatch(handleLogout(navigate));
@@ -35,9 +42,9 @@ function NavBar() {
               {user?.name && (
                 <Nav.Link className='text-light text-capitalize'>Hi, {user?.name}</Nav.Link>
               )}
-              <Nav.Link className='text-light' onClick={logout}>
+              {/* <Nav.Link className='text-light' onClick={logout}>
                 Logout
-              </Nav.Link>
+              </Nav.Link> */}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -86,9 +86,6 @@ const CreateTravel = ({ match }) => {
     },
   ];
   const travel = location?.state;
-  console.log('🚀 ~ file: CreateTravel.js:93 ~ CreateTravel ~ travel:', travel);
-
-  console.log('startTime', travel, travel?.travelTime?.from.split(':'));
 
   // selectors
   const { btnLoader } = useSelector(state => state.app);
