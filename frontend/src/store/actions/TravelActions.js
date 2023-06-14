@@ -9,6 +9,11 @@ import {
   postSendTravelRequest,
   getRequestedTravels,
   editMyTravelStatus,
+  getSentTravels,
+  getReviewUsers,
+  addMyUserReview,
+  getMyReviews,
+  getUserReviews,
 } from '../services/TravelServices';
 import { buttonLoader } from './AppActions';
 
@@ -94,6 +99,24 @@ export const editTravel = (token, values, id, navigate) => dispatch => {
     });
 };
 
+export const addUserReview = (token, values, navigate) => dispatch => {
+  dispatch(buttonLoader(true));
+  addMyUserReview(token, values)
+    .then(res => {
+      dispatch(buttonLoader(false));
+      toast.success('Successfully added.');
+      navigate('/dashboard');
+      return;
+    })
+    .catch(error => {
+      dispatch(buttonLoader(false));
+      toast.error(error?.response?.data?.message);
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
 export const singleTravel = (token, id) => dispatch => {
   getSingleTravels(token, id)
     .then(res => {
@@ -130,6 +153,70 @@ export const requestedTravels = token => dispatch => {
     .then(res => {
       dispatch({
         type: 'REQUESTED_TRAVELS',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const sentTravels = token => dispatch => {
+  getSentTravels(token)
+    .then(res => {
+      dispatch({
+        type: 'SENT_TRAVELS',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const reviewUsers = token => dispatch => {
+  getReviewUsers(token)
+    .then(res => {
+      dispatch({
+        type: 'REVIEW_USERS',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const myReviews = token => dispatch => {
+  getMyReviews(token)
+    .then(res => {
+      dispatch({
+        type: 'REVIEWS_MY',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const userReviews = (token, id) => dispatch => {
+  getUserReviews(token, id)
+    .then(res => {
+      dispatch({
+        type: 'REVIEWS_USERS',
         payload: res.data.payload,
       });
       return;

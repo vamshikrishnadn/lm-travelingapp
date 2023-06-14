@@ -9,9 +9,11 @@ import {
   editTravelStatus,
   sendTravelRequest,
   singleTravel,
+  userReviews,
 } from '../../../store/actions/TravelActions';
 import moment from 'moment';
 import AppLoader from '../../layouts/AppLoader';
+import { Star, StarFill } from 'react-bootstrap-icons';
 
 const TravelDetails = () => {
   const { id } = useParams();
@@ -27,17 +29,30 @@ const TravelDetails = () => {
   const [requestedBy, setRequestedBy] = useState();
   const [travelOwnerInfo, setTravelOwnerInfo] = useState();
   const [data, setData] = useState({ role: 'employee' });
+  const headers = ['Sl. No', 'Reviewed By', 'Reviewed On', 'Rating', 'Comment'];
 
   // selectors
   const { token } = useSelector(state => state.auth?.authDetails);
   const travel = useSelector(state => state?.travel?.singleTravel);
+  const reviews = useSelector(state => state?.travel?.userReviews);
 
   useEffect(() => {
     dispatch(singleTravel(token, id));
   }, []);
 
   useEffect(() => {
-    if (pathname.includes('travel/request/received') && travelDetails) {
+    if (pathname.includes('travel/request/received')) {
+      dispatch(userReviews(token, travelDetails?.requestedBy?._id));
+    }
+    if (pathname.includes('travel/request/requested')) {
+      dispatch(userReviews(token, travelDetails?.requestedTo?._id));
+    }
+
+    if (
+      (pathname.includes('travel/request/received') ||
+        pathname.includes('travel/request/requested')) &&
+      travelDetails
+    ) {
       setRequestedBy({
         Name: travelDetails?.requestedBy?.name,
         'Requested on': moment(travelDetails?.requestedDate).format('lll'),
@@ -48,6 +63,7 @@ const TravelDetails = () => {
         state: travelDetails?.requestedBy?.state,
         country: travelDetails?.requestedBy?.country,
         address: travelDetails?.requestedBy?.address,
+        occupation: travelDetails?.requestedBy?.occupation,
       });
       setTravelOwnerInfo({
         Name: travelDetails?.requestedTo?.name,
@@ -59,6 +75,7 @@ const TravelDetails = () => {
         state: travelDetails?.requestedTo?.state,
         country: travelDetails?.requestedTo?.country,
         address: travelDetails?.requestedTo?.address,
+        occupation: travelDetails?.requestedTo?.occupation,
       });
     }
   }, [travelDetails]);
@@ -66,7 +83,7 @@ const TravelDetails = () => {
   useEffect(() => {
     if (travel) {
       setTravels({
-        'Travel Id': travel?.travelId,
+        'Travel Id': travel?.travelId.toUpperCase(),
         'Vehicle Company': travel?.vehicleMade,
         'Vehicle Model': travel?.vehicleModel,
         'Vehicle Number': travel?.vehicleNumber,
@@ -130,7 +147,7 @@ const TravelDetails = () => {
             Object.keys(travels)?.map((key, i) => (
               <div key={i} className='col-12 col-md-6 mb-2'>
                 <b>{key}: </b>
-                {travels[key] ?? '-'}
+                {travels[key] ?? 'N/A'}
               </div>
             ))}
 
@@ -142,7 +159,7 @@ const TravelDetails = () => {
                 {Object.keys(requestedBy)?.map((key, i) => (
                   <div key={i} className='col-12 col-md-6 mb-2'>
                     <b className='text-capitalize'>{key}: </b>
-                    <span>{requestedBy[key] ?? '-'}</span>
+                    <span>{requestedBy[key] ?? 'N/A'}</span>
                   </div>
                 ))}
               </div>
@@ -157,7 +174,7 @@ const TravelDetails = () => {
                 {Object.keys(travelOwnerInfo)?.map((key, i) => (
                   <div key={i} className='col-12 col-md-6 mb-2'>
                     <b className='text-capitalize'>{key}: </b>
-                    {travelOwnerInfo[key] ?? '-'}
+                    {travelOwnerInfo[key] ?? 'N/A'}
                   </div>
                 ))}
               </div>
@@ -170,6 +187,59 @@ const TravelDetails = () => {
               <b>Requested Comment: </b>
               <br />
               {travelDetails?.comment}
+            </div>
+          )}
+
+          {pathname !== `/travel/view/${id}` && (
+            <div>
+              {reviews && reviews.length === 0 ? (
+                <h5>No Reviews found for this user</h5>
+              ) : (
+                <div className='col-12'>
+                  <hr />
+                  <h5 className='text-primary text-decoration-underline'>User Reviews</h5>
+                  <>
+                    <table className='table table-striped table-hover'>
+                      <thead className='bg-success'>
+                        <tr className='bg-primary'>
+                          {headers?.map((header, i) => (
+                            <th scope='col' key={i}>
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {reviews?.length === 0 ? (
+                          <h6 className='text-danger'>No reviews found</h6>
+                        ) : (
+                          reviews?.map((review, i) => (
+                            <tr key={i}>
+                              <th scope='row'>{i + 1}</th>
+                              <td className='text-capitalize'>{review?.reviewedBy?.name}</td>
+                              <td className='text-capitalize'>
+                                {moment(review?.reviewedOn).format('ll')}
+                              </td>
+                              <td>
+                                {[...Array(5)].map((star, i) => (
+                                  <span key={i} className='mx-1 cursor-pointer'>
+                                    {i + 1 > review?.rating ? (
+                                      <Star />
+                                    ) : (
+                                      <StarFill style={{ color: 'gold' }} />
+                                    )}
+                                  </span>
+                                ))}
+                              </td>
+                              <td className=''>{review?.comment}</td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </>
+                </div>
+              )}
             </div>
           )}
 

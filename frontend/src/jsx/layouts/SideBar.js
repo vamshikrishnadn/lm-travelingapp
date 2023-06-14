@@ -40,6 +40,30 @@ const SideBar = () => {
         >
           Travel requests
         </Link>
+        <Link
+          to='/travel/sent'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/travel/sent' ? 'active' : ''
+          }`}
+        >
+          Requested Travels
+        </Link>
+        <Link
+          to='/travel/comment'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/travel/comment' ? 'active' : ''
+          }`}
+        >
+          Comments
+        </Link>
+        <Link
+          to='/travel/reviews'
+          class={`list-group-item list-group-item-action text-capitalize ${
+            pathname === '/travel/reviews' ? 'active' : ''
+          }`}
+        >
+          My Reviews
+        </Link>
       </div>
     </>
   );

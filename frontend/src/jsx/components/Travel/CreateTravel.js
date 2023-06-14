@@ -6,6 +6,7 @@ import AppCard from '../../layouts/AppCard';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { createTravel, editTravel } from '../../../store/actions/TravelActions';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 
 const CreateTravel = ({ match }) => {
   const { id } = useParams();
@@ -15,12 +16,7 @@ const CreateTravel = ({ match }) => {
   const dispatch = useDispatch();
 
   // states
-  const [data, setData] = useState({
-    startTime: '1',
-    endTime: '12',
-    startMode: 'AM',
-    endMode: 'PM',
-  });
+  const [data, setData] = useState({});
 
   // constants
   const hours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
@@ -90,6 +86,7 @@ const CreateTravel = ({ match }) => {
     },
   ];
   const travel = location?.state;
+  console.log('🚀 ~ file: CreateTravel.js:93 ~ CreateTravel ~ travel:', travel);
 
   console.log('startTime', travel, travel?.travelTime?.from.split(':'));
 
@@ -119,18 +116,22 @@ const CreateTravel = ({ match }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const submitValues = {
-      ...data,
-      travelTime: {
-        from: data?.startTime + ':' + data?.startMode,
-        to: data?.endTime + ':' + data?.endMode,
-      },
-    };
-    console.log('data', submitValues);
-    if (id) {
-      return dispatch(editTravel(token, submitValues, id, navigate));
+    if (data?.startTime && data?.startMode && data?.endTime && data?.endMode) {
+      const submitValues = {
+        ...data,
+        travelTime: {
+          from: data?.startTime + ':' + data?.startMode,
+          to: data?.endTime + ':' + data?.endMode,
+        },
+      };
+      console.log('data', submitValues, data);
+      if (id) {
+        return dispatch(editTravel(token, submitValues, id, navigate));
+      }
+      dispatch(createTravel(token, submitValues, navigate));
+    } else {
+      toast.error('All fields are required');
     }
-    dispatch(createTravel(token, submitValues, navigate));
   };
 
   const handleClearData = () => {
@@ -201,6 +202,7 @@ const CreateTravel = ({ match }) => {
                     value={data?.['startTime']}
                     required
                   >
+                    <option>Select Time</option>
                     {hours?.map((hour, i) => (
                       <option key={i} value={hour}>
                         {hour}
@@ -213,6 +215,7 @@ const CreateTravel = ({ match }) => {
                     value={data?.['startMode']}
                     required
                   >
+                    <option>Select Mode</option>
                     {['AM', 'PM']?.map((hour, i) => (
                       <option key={i} value={hour}>
                         {hour}
@@ -235,6 +238,7 @@ const CreateTravel = ({ match }) => {
                     value={data?.['endTime']}
                     required
                   >
+                    <option>Select Time</option>
                     {hours?.map((hour, i) => (
                       <option key={i} value={hour}>
                         {hour}
@@ -247,6 +251,7 @@ const CreateTravel = ({ match }) => {
                     value={data?.['endMode']}
                     required
                   >
+                    <option>Select Mode</option>
                     {['AM', 'PM']?.map((hour, i) => (
                       <option key={i} value={hour}>
                         {hour}

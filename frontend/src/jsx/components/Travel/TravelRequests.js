@@ -15,12 +15,12 @@ const TravelRequests = () => {
   const headers = [
     'Sl. No',
     'Travel Id',
+    'Requested By',
     'Status',
     'Vehicle Company',
     'From',
     'To',
     'Travel Date',
-    'Requested By',
     'Actions',
   ];
 
@@ -59,6 +59,7 @@ const TravelRequests = () => {
                   <tr key={i}>
                     <th scope='row'>{i + 1}</th>
                     <td className='text-uppercase'>{travel?.travel?.travelId}</td>
+                    <td className='text-capitalize'>{travel?.requestedBy?.name}</td>
                     <td className='text-capitalize'>{travel?.status}</td>
                     <td className='text-capitalize'>{travel?.travel?.vehicleMade}</td>
                     <td className='text-capitalize'>{travel?.travel?.from}</td>
@@ -66,7 +67,6 @@ const TravelRequests = () => {
                     <td className='text-capitalize'>
                       {moment(travel?.travel?.travelDate).format('ll')}
                     </td>
-                    <td className='text-capitalize'>{travel?.requestedBy?.name}</td>
                     <td className=''>
                       <Link
                         to={`/travel/request/received/${travel?.travel?._id}`}

@@ -11,6 +11,9 @@ import CreateTravel from './components/Travel/CreateTravel';
 import MyTravels from './components/Travel/MyTravels';
 import TravelDetails from './components/Travel/TravelDetails';
 import TravelRequests from './components/Travel/TravelRequests';
+import SentRequests from './components/Travel/SentRequests';
+import CommentTravel from './components/Travel/CommentTravel';
+import MyReviews from './components/Travel/MyReviews';
 
 const App = () => {
   // selectors
@@ -23,9 +26,13 @@ const App = () => {
           <Route path='/dashboard' element={<Dashboard />} />;
           <Route path='/travel/create' element={<CreateTravel />} />;
           <Route path='/travel/requests' element={<TravelRequests />} />;
+          <Route path='/travel/sent' element={<SentRequests />} />;
+          <Route path='/travel/comment' element={<CommentTravel />} />;
+          <Route path='/travel/reviews' element={<MyReviews />} />;
           <Route path='/travel/edit/:id' element={<CreateTravel />} />;
           <Route path='/travel/view/:id' element={<TravelDetails />} />;
           <Route path='/travel/request/send/:id' element={<TravelDetails />} />;
+          <Route path='/travel/request/requested/:id' element={<TravelDetails />} />;
           <Route path='/travel/request/received/:id' element={<TravelDetails />} />;
           <Route path='/travel/my' element={<MyTravels />} />;
           <Route path='/login' element={<Login />} />;

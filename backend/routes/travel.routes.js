@@ -16,6 +16,7 @@ const {
   getTravelReview,
   getMyTravelReviews,
   getTravelDetails,
+  reviewUsers,
 } = require('../controllers/travel.controllers');
 const { isAuthenticatedUser, authorizedRoles } = require('../middlewares/auth');
 
@@ -27,6 +28,7 @@ router.route('/request/received').get(isAuthenticatedUser, receivedRequests);
 router.route('/create').post(isAuthenticatedUser, createTravel);
 router.route('/request/update/:id').patch(isAuthenticatedUser, updateStatusRequests);
 router.route('/review/create').post(isAuthenticatedUser, createTravelReview);
+router.route('/review/users').get(isAuthenticatedUser, reviewUsers);
 router.route('/review/get/my').get(isAuthenticatedUser, getMyTravelReviews);
 router.route('/review/get/:id').get(isAuthenticatedUser, getTravelReview);
 router.route('/single/:id').get(isAuthenticatedUser, getTravelDetails);

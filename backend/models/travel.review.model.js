@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const travelReviewSchema = new mongoose.Schema({
-  reviewedDate: { type: Date, default: Date.now },
+  reviewedOn: { type: Date, default: Date.now },
   reviewedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
