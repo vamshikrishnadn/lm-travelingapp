@@ -32,15 +32,7 @@ const SideBar = () => {
         >
           My travel
         </Link>
-        <Link
-          to='/profile'
-          class={`list-group-item list-group-item-action ${
-            pathname === '/profile' ? 'active' : ''
-          }`}
-         >
-         Profile
-        </Link>
-
+      
       </div>
     </>
   );
