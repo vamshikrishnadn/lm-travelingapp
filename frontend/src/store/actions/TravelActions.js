@@ -14,6 +14,8 @@ import {
   addMyUserReview,
   getMyReviews,
   getUserReviews,
+  getUsersInTravel,
+  getFilterTravels,
 } from '../services/TravelServices';
 import { buttonLoader } from './AppActions';
 
@@ -38,6 +40,22 @@ export const createTravel = (token, values, navigate) => dispatch => {
 
 export const otherTravels = token => dispatch => {
   getOtherTravels(token)
+    .then(res => {
+      dispatch({
+        type: 'OTHER_TRAVELS',
+        payload: res.data.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const filterTravels = (data, token) => dispatch => {
+  getFilterTravels(data, token)
     .then(res => {
       dispatch({
         type: 'OTHER_TRAVELS',
@@ -122,6 +140,22 @@ export const singleTravel = (token, id) => dispatch => {
     .then(res => {
       dispatch({
         type: 'SINGLE_TRAVEL',
+        payload: res.data?.payload,
+      });
+      return;
+    })
+    .catch(error => {
+      console.error(error);
+      console.log(error);
+      return;
+    });
+};
+
+export const usersInTravel = (token, id) => dispatch => {
+  getUsersInTravel(token, id)
+    .then(res => {
+      dispatch({
+        type: 'TRAVEL_USERS',
         payload: res.data?.payload,
       });
       return;

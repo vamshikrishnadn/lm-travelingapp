@@ -38,6 +38,12 @@ body {
   overflow-y: scroll;
 }
 
+td {
+  max-width: 200px;
+  min-width: 180px;
+  overflow: hidden;
+}
+
 @media only screen and (max-width: 768px) {
   .side_sticky {
     position: relative;
@@ -45,5 +51,8 @@ body {
     width: 100%;
     height: auto !important;
     overflow-y: scroll;
+  }
+  .login_dashboard .row {
+    transform: translateX(10%);
   }
 }

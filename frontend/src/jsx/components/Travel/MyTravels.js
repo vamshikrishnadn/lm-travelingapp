@@ -16,6 +16,8 @@ const MyTravels = () => {
     'Sl. No',
     'Travel Id',
     'Vehicle Company',
+    'Status',
+    'Price',
     'From',
     'To',
     'Via',
@@ -69,6 +71,8 @@ const MyTravels = () => {
                     <th scope='row'>{i + 1}</th>
                     <td className='text-uppercase'>{travel?.travelId}</td>
                     <td className='text-capitalize'>{travel?.vehicleMade}</td>
+                    <td className='text-capitalize'>{travel?.status}</td>
+                    <td className='text-capitalize'>{travel?.price} ₹</td>
                     <td className='text-capitalize'>{travel?.from}</td>
                     <td className='text-capitalize'>{travel?.to}</td>
                     <td className='text-capitalize'>{travel?.via || '-'}</td>

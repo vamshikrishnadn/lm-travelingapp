@@ -12,10 +12,20 @@ const config = token => {
   };
 };
 
-export const signupService = formValues => axios.post(`${authUrl}/register`, formValues);
+const formDataConfig = token => {
+  return {
+    headers: {
+      'Content-type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
+export const signupService = formValues =>
+  axios.post(`${authUrl}/register`, formValues, formDataConfig());
 export const signinService = formValues => axios.post(`${authUrl}/login`, formValues);
 export const updateUserPassword = (formValues, token) =>
   axios.put(`${authUrl}/password/update`, formValues, config(token));
 export const updateUserProfile = (formValues, token) =>
-  axios.put(`${authUrl}/me/update`, formValues, config(token));
+  axios.put(`${authUrl}/me/update`, formValues, formDataConfig(token));
 export const getUserDetails = token => axios.get(`${authUrl}/me`, config(token));

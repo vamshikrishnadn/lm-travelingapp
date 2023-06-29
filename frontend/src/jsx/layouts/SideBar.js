@@ -2,6 +2,17 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { handleLogout } from '../../store/actions/AuthActions';
+import {
+  BagDashFill,
+  BoxArrowRight,
+  CalendarPlusFill,
+  CarFrontFill,
+  ChatLeftDotsFill,
+  LockFill,
+  Person,
+  PersonFill,
+  SendFill,
+} from 'react-bootstrap-icons';
 
 const SideBar = () => {
   const location = useLocation();
@@ -23,7 +34,7 @@ const SideBar = () => {
             pathname === '/dashboard' ? 'active' : ''
           }`}
         >
-          Dashboard
+          <BagDashFill /> Dashboard
         </Link>
         <Link
           to='/travel/create'
@@ -31,7 +42,7 @@ const SideBar = () => {
             pathname === '/travel/create' ? 'active' : ''
           }`}
         >
-          Create travel
+          <CalendarPlusFill /> Create travel
         </Link>
         <Link
           to='/travel/my'
@@ -39,7 +50,7 @@ const SideBar = () => {
             pathname === '/travel/my' ? 'active' : ''
           }`}
         >
-          My travels
+          <CarFrontFill /> My travels
         </Link>
         <Link
           to='/travel/requests'
@@ -47,7 +58,7 @@ const SideBar = () => {
             pathname === '/travel/requests' ? 'active' : ''
           }`}
         >
-          Travel requests
+          <CarFrontFill /> Travel requests
         </Link>
         <Link
           to='/travel/sent'
@@ -55,7 +66,7 @@ const SideBar = () => {
             pathname === '/travel/sent' ? 'active' : ''
           }`}
         >
-          Requested Travels
+          <CarFrontFill /> Requested Travels
         </Link>
         <Link
           to='/travel/comment'
@@ -63,7 +74,7 @@ const SideBar = () => {
             pathname === '/travel/comment' ? 'active' : ''
           }`}
         >
-          Comments
+          <SendFill /> Add Review
         </Link>
         <Link
           to='/travel/reviews'
@@ -71,7 +82,7 @@ const SideBar = () => {
             pathname === '/travel/reviews' ? 'active' : ''
           }`}
         >
-          My Reviews
+          <ChatLeftDotsFill /> My Reviews
         </Link>
         <Link
           to='/update/password'
@@ -79,7 +90,7 @@ const SideBar = () => {
             pathname === '/update/password' ? 'active' : ''
           }`}
         >
-          Update Password
+          <LockFill /> Update Password
         </Link>
         <Link
           to='/update/profile'
@@ -87,16 +98,14 @@ const SideBar = () => {
             pathname === '/update/profile' ? 'active' : ''
           }`}
         >
-          Update profile
+          <PersonFill /> Update profile
         </Link>
         <a
           href='#'
           onClick={logout}
-          class={`list-group-item list-group-item-action text-capitalize ${
-            pathname === '/update/profile' ? 'active' : ''
-          }`}
+          class={`list-group-item list-group-item-action text-capitalize`}
         >
-          Logout
+          <BoxArrowRight /> Logout
         </a>
       </div>
     </>

@@ -6,6 +6,7 @@ import { EyeFill, EyeSlashFill } from 'react-bootstrap-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from 'react-bootstrap/Spinner';
 
+import travelImg from '../../../assets/images/travel.jpg';
 import '../../../assets/css/auth.css';
 import { loginUser } from '../../../store/actions/AuthActions';
 
@@ -48,50 +49,55 @@ const Login = () => {
   };
 
   return (
-    <section className='login_section'>
-      <div className='col-10 col-lg-4 form_container'>
-        <h4 className='text-center mb-4'>Login</h4>
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className='mb-3' controlId='formBasicEmail'>
-            <Form.Label>
-              Email<span className='text-danger'>*</span>
-            </Form.Label>
-            <Form.Control
-              type='email'
-              placeholder='Enter email'
-              name='email'
-              value={data?.['email']}
-              onChange={handleChange}
-            />
-            {errors?.email && <span className='text-danger'>{errors?.['email']}</span>}
-          </Form.Group>
+    <section className='login_dashboard'>
+      <div className='row'>
+        <div className='col-10 col-lg-4 form_container'>
+          <img src={travelImg} className='img-fluid mt-3' />
+        </div>
+        <div className='col-10 col-lg-4 form_container'>
+          <h4 className='text-center mb-4'>Login</h4>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className='mb-3' controlId='formBasicEmail'>
+              <Form.Label>
+                Email<span className='text-danger'>*</span>
+              </Form.Label>
+              <Form.Control
+                type='email'
+                placeholder='Enter email'
+                name='email'
+                value={data?.['email']}
+                onChange={handleChange}
+              />
+              {errors?.email && <span className='text-danger'>{errors?.['email']}</span>}
+            </Form.Group>
 
-          <Form.Group className='mb-3 position-relative' controlId='formBasicPassword'>
-            <Form.Label>
-              Password<span className='text-danger'>*</span>
-            </Form.Label>
-            <Form.Control
-              type={showPassword ? 'text' : 'password'}
-              placeholder='Password'
-              name='password'
-              value={data?.['password']}
-              onChange={handleChange}
-            />
-            <div className='eye_icon' onClick={() => setShowPassword(!showPassword)}>
-              {showPassword ? <EyeSlashFill /> : <EyeFill />}
+            <Form.Group className='mb-3 position-relative' controlId='formBasicPassword'>
+              <Form.Label>
+                Password<span className='text-danger'>*</span>
+              </Form.Label>
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder='Password'
+                name='password'
+                value={data?.['password']}
+                onChange={handleChange}
+              />
+              <div className='eye_icon' onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <EyeSlashFill /> : <EyeFill />}
+              </div>
+              {errors?.password && <span className='text-danger'>{errors?.['password']}</span>}
+            </Form.Group>
+            <button className='login_btn my-3 mt-4' type='submit'>
+              {btnLoader ? <Spinner animation='border' size='sm' /> : 'Login'}
+            </button>
+            <div className='text-center'>
+              <span className='text-muted'>Not registered?</span>{' '}
+              <Link to='/register' className='text-green login_link'>
+                Sign up
+              </Link>
             </div>
-            {errors?.password && <span className='text-danger'>{errors?.['password']}</span>}
-          </Form.Group>
-          <button className='login_btn my-3 mt-4' type='submit'>
-            {btnLoader ? <Spinner animation='border' size='sm' /> : 'Login'}
-          </button>
-          <div className='text-center'>
-            <span className='text-muted'>Not registered?</span>{' '}
-            <Link to='/register' className='text-green login_link'>
-              Sign up
-            </Link>
-          </div>
-        </Form>
+          </Form>
+        </div>
       </div>
     </section>
   );

@@ -7,6 +7,9 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { createTravel, editTravel } from '../../../store/actions/TravelActions';
 import moment from 'moment';
 import { toast } from 'react-toastify';
+import { City } from 'country-state-city';
+
+var cities = City.getCitiesOfCountry('IN');
 
 const CreateTravel = ({ match }) => {
   const { id } = useParams();
@@ -63,27 +66,27 @@ const CreateTravel = ({ match }) => {
       placeholder: 'Enter members to travel',
       name: 'travelMembersCount',
     },
-    {
-      type: 'text',
-      label: 'From',
-      required: true,
-      placeholder: 'From location',
-      name: 'from',
-    },
-    {
-      type: 'text',
-      label: 'To',
-      required: true,
-      placeholder: 'To location',
-      name: 'to',
-    },
-    {
-      type: 'text',
-      label: 'Via',
-      required: false,
-      placeholder: 'Via location',
-      name: 'via',
-    },
+    // {
+    //   type: 'text',
+    //   label: 'From',
+    //   required: true,
+    //   placeholder: 'From location',
+    //   name: 'from',
+    // },
+    // {
+    //   type: 'text',
+    //   label: 'To',
+    //   required: true,
+    //   placeholder: 'To location',
+    //   name: 'to',
+    // },
+    // {
+    //   type: 'text',
+    //   label: 'Via',
+    //   required: false,
+    //   placeholder: 'Via location',
+    //   name: 'via',
+    // },
   ];
   const travel = location?.state;
 
@@ -113,7 +116,23 @@ const CreateTravel = ({ match }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (data?.startTime && data?.startMode && data?.endTime && data?.endMode) {
+    if (
+      data?.startTime &&
+      data?.startMode &&
+      data?.endTime &&
+      data?.endMode &&
+      data?.from &&
+      data?.to
+    ) {
+      // console.log(
+      //   'seeter==>',
+      //   data?.setter,
+      //   'Travel count  ===>',
+      //   Number(data?.travelMembersCount)
+      // );
+      if (Number(data?.setter) < Number(data?.travelMembersCount)) {
+        return toast.error('Travel members count should be less that seater count.');
+      }
       const submitValues = {
         ...data,
         travelTime: {
@@ -142,6 +161,7 @@ const CreateTravel = ({ match }) => {
       from: '',
       to: '',
       via: '',
+      file: [],
       travelDate: '',
     });
   };
@@ -183,6 +203,96 @@ const CreateTravel = ({ match }) => {
                   value={data?.['travelDate']}
                   onChange={handleChange}
                   required={true}
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>
+                  Fuel Type<span className='text-danger'>*</span>
+                </Form.Label>
+                <br />
+                <Form.Check
+                  inline
+                  label='Diesel'
+                  name='fuelType'
+                  type={'radio'}
+                  id={`gender-1`}
+                  value={'Diesel'}
+                  onChange={handleChange}
+                />
+                <Form.Check
+                  inline
+                  label='Petrol'
+                  name='fuelType'
+                  type={'radio'}
+                  id={`gender-2`}
+                  value={'Petrol'}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6 mb-2'>
+              <Form.Group className='mb-3' controlId='formBasicEmail'>
+                <Form.Label className='text-capitalize'>
+                  From <span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Select name='from' onChange={handleChange} value={data?.['from']} required>
+                  <option>Select city</option>
+                  {cities?.map((city, i) => (
+                    <option key={i} value={city?.name}>
+                      {city?.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6 mb-2'>
+              <Form.Group className='mb-3' controlId='formBasicEmail'>
+                <Form.Label className='text-capitalize'>
+                  To <span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Select name='to' onChange={handleChange} value={data?.['to']} required>
+                  <option>Select city</option>
+                  {cities?.map((city, i) => (
+                    <option key={i} value={city?.name}>
+                      {city?.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6 mb-2'>
+              <Form.Group className='mb-3' controlId='formBasicEmail'>
+                <Form.Label className='text-capitalize'>
+                  Via <span className='text-danger'>*</span>
+                </Form.Label>
+                <Form.Select name='via' onChange={handleChange} value={data?.['via']} required>
+                  <option>Select city</option>
+                  {cities?.map((city, i) => (
+                    <option key={i} value={city?.name}>
+                      {city?.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </div>
+
+            <div className='col-12 col-lg-6'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>Files</Form.Label>
+                <br />
+                <input
+                  type='file'
+                  // name='file'
+                  // required
+                  accept='image/*'
+                  onChange={e => setData({ ...data, file: e.target.files?.[0] })}
+                  multiple={false}
                 />
               </Form.Group>
             </div>
@@ -259,29 +369,19 @@ const CreateTravel = ({ match }) => {
               </Form.Group>
             </div>
 
-            <div className='col-12 col-lg-6'>
-              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
-                <Form.Label>
-                  Fuel Type<span className='text-danger'>*</span>
+            <div className='col-12 col-lg-6 mb-2'>
+              <Form.Group className='mb-3' controlId='formBasicEmail'>
+                <Form.Label className='text-capitalize'>
+                  Travel Price in INR
+                  <span className='text-danger'>*</span>
                 </Form.Label>
-                <br />
-                <Form.Check
-                  inline
-                  label='Diesel'
-                  name='fuelType'
-                  type={'radio'}
-                  id={`gender-1`}
-                  value={'Diesel'}
+                <Form.Control
+                  type='number'
+                  placeholder='Travel price'
+                  name='price'
+                  value={data?.['price']}
                   onChange={handleChange}
-                />
-                <Form.Check
-                  inline
-                  label='Petrol'
-                  name='fuelType'
-                  type={'radio'}
-                  id={`gender-2`}
-                  value={'Petrol'}
-                  onChange={handleChange}
+                  required={true}
                 />
               </Form.Group>
             </div>

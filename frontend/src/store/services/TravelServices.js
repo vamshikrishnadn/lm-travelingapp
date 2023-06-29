@@ -12,14 +12,25 @@ const config = token => {
   };
 };
 
+const formDataConfig = token => {
+  return {
+    headers: {
+      'Content-type': 'multipart/form-data',
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 export const createTravelService = (token, formValues) =>
-  axios.post(`${travelUrl}/create`, formValues, config(token));
+  axios.post(`${travelUrl}/create`, formValues, formDataConfig(token));
 export const editMyTravels = (token, formValues, id) =>
-  axios.patch(`${travelUrl}/edit/${id}`, formValues, config(token));
+  axios.patch(`${travelUrl}/edit/${id}`, formValues, formDataConfig(token));
 export const addMyUserReview = (token, formValues) =>
   axios.post(`${travelUrl}/review/create`, formValues, config(token));
 
 export const getOtherTravels = token => axios.get(`${travelUrl}/get/other`, config(token));
+export const getFilterTravels = (data, token) =>
+  axios.post(`${travelUrl}/get/other/filter`, data, config(token));
 export const getRequestedTravels = token =>
   axios.get(`${travelUrl}/request/received`, config(token));
 export const getMyTravels = token => axios.get(`${travelUrl}/get/my`, config(token));
@@ -36,3 +47,4 @@ export const editMyTravelStatus = (token, values, id) =>
 export const getMyReviews = token => axios.get(`${travelUrl}/review/get/my`, config(token));
 export const getUserReviews = (token, id) =>
   axios.get(`${travelUrl}/review/get/${id}`, config(token));
+export const getUsersInTravel = (token, id) => axios.get(`${travelUrl}/users/${id}`, config(token));

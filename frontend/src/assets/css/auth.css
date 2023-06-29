@@ -11,6 +11,20 @@
   justify-content: center;
 }
 
+.login_dashboard {
+  background: var(--main-color);
+  width: 100vw;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login_dashboard .row {
+  transform: translateX(15%);
+}
+
 .form_container {
   padding: 2rem;
   background: #fff;

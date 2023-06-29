@@ -42,6 +42,14 @@ function NavBar() {
               {user?.name && (
                 <Nav.Link className='text-light text-capitalize'>Hi, {user?.name}</Nav.Link>
               )}
+              <img
+                src={
+                  user?.file?.filename
+                    ? `http://localhost:5000/${user?.file?.filename}`
+                    : 'https://static.vecteezy.com/system/resources/previews/000/439/863/original/vector-users-icon.jpg'
+                }
+                style={{ width: '40px', borderRadius: '50%', marginLeft: '10px' }}
+              />
               {/* <Nav.Link className='text-light' onClick={logout}>
                 Logout
               </Nav.Link> */}

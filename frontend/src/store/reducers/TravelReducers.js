@@ -40,6 +40,11 @@ export default (state = {}, action) => {
         ...state,
         userReviews: [...action.payload],
       };
+    case 'TRAVEL_USERS':
+      return {
+        ...state,
+        travelUsers: [...action.payload],
+      };
 
     default:
       return state;

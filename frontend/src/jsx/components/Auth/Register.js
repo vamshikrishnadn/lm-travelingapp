@@ -246,6 +246,21 @@ const Register = () => {
 
             <div className='col-12'>
               <Form.Group className='mb-3 ' controlId='formBasicEmail'>
+                <Form.Label>Profile Picture</Form.Label>
+                <br />
+                <input
+                  type='file'
+                  // name='file'
+                  // required
+                  accept='image/*'
+                  onChange={e => setData({ ...data, file: e.target.files[0] })}
+                  multiple={false}
+                />
+              </Form.Group>
+            </div>
+
+            <div className='col-12'>
+              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
                 <Form.Label>
                   Address<span className='text-danger'>*</span>
                 </Form.Label>
