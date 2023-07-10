@@ -7,19 +7,33 @@ import Spinner from 'react-bootstrap/Spinner';
 import { toast } from 'react-toastify';
 
 import '../../../assets/css/auth.css';
+import AppCard from '../../layouts/AppCard';
+import { updateProfile, userDetails } from '../../../store/actions/AuthActions';
+import AppLoader from '../../layouts/AppLoader';
 
-import { registerUser } from '../../../store/actions/AuthActions';
-
-const Register = () => {
+const UpdateProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // states
-  const [data, setData] = useState({ role: 'employee' });
+  const [data, setData] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
   // selectors
   const { btnLoader } = useSelector(state => state.app);
+  const { token } = useSelector(state => state.auth?.authDetails);
+  const { profile } = useSelector(state => state.auth);
+  console.log('🚀 ~ file: UpdateProfile.js:26 ~ UpdateProfile ~ profile:', profile);
+
+  useEffect(() => {
+    dispatch(userDetails(token));
+  }, []);
+
+  useEffect(() => {
+    if (profile) {
+      setData({ ...profile });
+    }
+  }, []);
 
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -28,18 +42,16 @@ const Register = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
-    if (data.password !== data.confirmPassword) {
-      return toast.error('Password and confirm password should be the same.');
-    }
-
     console.log('data', data);
-    dispatch(registerUser(data, navigate));
+    delete data?._id;
+    delete data?.email;
+    dispatch(updateProfile(data, token, navigate));
   };
 
-  return (
-    <section className='login_section'>
-      <div className='col-10 col-lg-8 form_container'>
-        <h4 className='text-center mb-4'>Register</h4>
+  return profile ? (
+    <AppCard>
+      <div>
+        <h4 className='mb-4 text-primary text-capitalize'>Update Profile</h4>
         <Form onSubmit={handleSubmit}>
           <div className='row'>
             <div className='col-12 col-lg-6'>
@@ -54,22 +66,6 @@ const Register = () => {
                   value={data?.['name']}
                   onChange={handleChange}
                   required
-                />
-              </Form.Group>
-            </div>
-
-            <div className='col-12 col-lg-6'>
-              <Form.Group className='mb-3 ' controlId='formBasicEmail'>
-                <Form.Label>
-                  Email<span className='text-danger'>*</span>
-                </Form.Label>
-                <Form.Control
-                  type='email'
-                  placeholder='Enter your email'
-                  name='email'
-                  value={data?.['email']}
-                  required
-                  onChange={handleChange}
                 />
               </Form.Group>
             </div>
@@ -141,40 +137,6 @@ const Register = () => {
                   placeholder='Occupation'
                   name='occupation'
                   value={data?.['occupation']}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-            </div>
-
-            <div className='col-12 col-lg-6'>
-              <Form.Group className='mb-3 position-relative' controlId='formBasicPassword'>
-                <Form.Label>
-                  Password<span className='text-danger'>*</span>
-                </Form.Label>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder='Password'
-                  name='password'
-                  value={data?.['password']}
-                  onChange={handleChange}
-                />
-                <div className='eye_icon' onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <EyeSlashFill /> : <EyeFill />}
-                </div>
-              </Form.Group>
-            </div>
-
-            <div className='col-12 col-lg-6'>
-              <Form.Group className='mb-3' controlId='formBasicPassword'>
-                <Form.Label>
-                  Confirm Password<span className='text-danger'>*</span>
-                </Form.Label>
-                <Form.Control
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder='Enter you password'
-                  name='confirmPassword'
-                  value={data?.['confirmPassword']}
-                  required
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -260,23 +222,17 @@ const Register = () => {
                 />
               </Form.Group>
             </div>
-
-            <div className='col-12 col-lg-6 mx-auto'>
-              <button className='login_btn my-3 mt-4' type='submit'>
-                {btnLoader ? <Spinner animation='border' size='sm' /> : 'Register'}
-              </button>
-            </div>
-            <div className='text-center'>
-              <span className='text-muted'>Already have account?</span>{' '}
-              <Link to='/login' className='text-green login_link'>
-                Sign in
-              </Link>
-            </div>
           </div>
+          <button className='btn btn-primary' type='submit'>
+            {' '}
+            {btnLoader ? <Spinner animation='border' size='sm' /> : 'Submit'}
+          </button>
         </Form>
       </div>
-    </section>
+    </AppCard>
+  ) : (
+    <AppLoader />
   );
 };
 
-export default Register;
+export default UpdateProfile;

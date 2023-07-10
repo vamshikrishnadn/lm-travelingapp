@@ -69,7 +69,7 @@ exports.logout = catchAsyncErrors(async (req, res, next) => {
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
-  res.status(200).json({ success: true, user });
+  res.status(200).json({ success: true, payload: user });
 });
 
 // Updated / Change password  => /api/v1/password/update
@@ -103,14 +103,15 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Get all users => /api/v1/admin/users
 exports.allUsers = catchAsyncErrors(async (req, res, next) => {
-  const allUsers = await User.find();
-  const resPerPage = 4;
-  const apiFeatures = new APIFeatures(User.find(), req.query)
-    .search()
-    .filter()
-    .pagination(resPerPage);
-  const users = await apiFeatures.query;
-  res.status(200).json({ success: true, users });
+  // const allUsers = await User.find();
+  // const resPerPage = 4;
+  // const apiFeatures = new APIFeatures(User.find(), req.query)
+  //   .search()
+  //   .filter()
+  //   .pagination(resPerPage);
+  // const users = await apiFeatures.query;
+  const users = await User.find({ _id: { $nin: [req.user._id] } });
+  res.status(200).json({ success: true, payload: users });
 });
 
 // Get user details => /api/v1/admin/user/:id

@@ -4,10 +4,12 @@ const TravelReview = require('../models/travel.review.model.js');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 const ErrorHandler = require('../utils/errorHandler');
 const moment = require('moment');
+const User = require('../models/user.model.js');
 
 exports.createTravel = catchAsyncErrors(async (req, res, next) => {
   const count = await Travel.count();
-  const travelId = `TRA` + String(count + 1).padStart(3, '0');
+  const user = await User.findById(req.user._id);
+  const travelId = user.name.substring(0, 4) + String(count + 1).padStart(3, '0');
   const travel = await Travel.create({
     ...req.body,
     travelId,
@@ -31,6 +33,15 @@ exports.editTravel = catchAsyncErrors(async (req, res, next) => {
   res.status(201).json({ success: true, payload: travel });
 });
 
+exports.reviewUsers = catchAsyncErrors(async (req, res, next) => {
+  const travels = await TravelRequests.find({
+    requestedBy: req.user._id,
+    status: 'Accept',
+  }).populate('requestedTo');
+
+  res.status(201).json({ success: true, payload: travels });
+});
+
 exports.getTravelDetails = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
   const travel = await Travel.findById(id).populate('createdBy');
@@ -48,8 +59,10 @@ exports.deleteTravel = catchAsyncErrors(async (req, res, next) => {
 exports.otherTravels = catchAsyncErrors(async (req, res, next) => {
   const travels = await Travel.find({
     createdBy: { $nin: [req.user._id] },
-    travelDate: { $lte: moment().format() },
-  }).populate('createdBy');
+    travelDate: { $gte: moment().subtract(1, 'day').format() },
+  })
+    .populate('createdBy')
+    .sort('travelDate');
 
   res.status(201).json({ success: true, payload: travels });
 });
@@ -63,10 +76,11 @@ exports.myTravels = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.sendRequest = catchAsyncErrors(async (req, res, next) => {
-  const findTravel = await TravelRequests.find({
+  const findTravel = await TravelRequests.findOne({
     ...req.body,
     requestedBy: req.user._id,
   });
+
   if (findTravel) {
     return next(new ErrorHandler('Request already sent.', 401));
   }
@@ -116,6 +130,13 @@ exports.getSingTravelRequest = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.createTravelReview = catchAsyncErrors(async (req, res, next) => {
+  const reviewAdded = await TravelReview.findOne({
+    reviewedBy: req.user._id,
+    reviewedTo: req.body.reviewedTo,
+  });
+  if (reviewAdded) {
+    return next(new ErrorHandler('Review already added.', 401));
+  }
   const review = await TravelReview.create({
     ...req.body,
     reviewedBy: req.user._id,
@@ -134,7 +155,7 @@ exports.getTravelReview = catchAsyncErrors(async (req, res, next) => {
 
 exports.getMyTravelReviews = catchAsyncErrors(async (req, res, next) => {
   const reviews = await TravelReview.find({
-    reviewedBy: req.user._id,
+    reviewedTo: req.user._id,
   }).populate('reviewedBy reviewedTo');
 
   res.status(200).json({ success: true, payload: reviews });

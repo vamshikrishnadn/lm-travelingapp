@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const randomIdSchema = new mongoose.Schema({
-  employeeId: {
-    type: String,
-    default: 'EMP001',
+  travelId: {
+    type: Number,
+    default: 1,
   },
   mangerId: {
     type: String,

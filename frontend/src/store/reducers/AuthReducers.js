@@ -5,6 +5,11 @@ export default (state = {}, action) => {
         ...state,
         authDetails: { ...action.payload },
       };
+    case 'PROFILE_DETAILS':
+      return {
+        ...state,
+        profile: { ...action.payload },
+      };
 
     default:
       return state;

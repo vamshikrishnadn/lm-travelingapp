@@ -23,9 +23,7 @@ router.route('/password/update').put(isAuthenticatedUser, updatePassword);
 router.route('/me').get(isAuthenticatedUser, getUserProfile);
 router.route('/me/update').put(isAuthenticatedUser, updateProfile);
 
-router.route('/manager/users').get(isAuthenticatedUser, authorizedRoles('manager'), allUsers);
-router
-  .route('/manager/user/:id')
-  .get(isAuthenticatedUser, authorizedRoles('manager'), getUserDetails);
+router.route('/users').get(isAuthenticatedUser, allUsers);
+router.route('/user/:id').get(isAuthenticatedUser, getUserDetails);
 
 module.exports = router;

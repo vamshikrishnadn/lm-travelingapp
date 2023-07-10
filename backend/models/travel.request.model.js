@@ -19,7 +19,7 @@ const travelRequestSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['Approve', 'Reject', 'Pending'],
+    enum: ['Accept', 'Reject', 'Pending'],
     default: 'Pending',
   },
   comment: {
