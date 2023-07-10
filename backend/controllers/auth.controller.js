@@ -11,6 +11,7 @@ const cloudinary = require('cloudinary');
 // Register a user => /api/v1/registers
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   // console.log(req.body);
+  const files = req.files;
   const { email, password, role } = req.body;
 
   const verifyAccount = await User.findOne({ email });
@@ -26,6 +27,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
   const user = await User.create({
     ...req.body,
+    file: files?.[0],
   });
   sendToken(user, 200, res);
 });
@@ -88,14 +90,19 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 // Updated / Change profile  => /api/v1/me/profile
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+  const files = req.files;
   if (req.body.email) {
     return res.status(400).send({ success: false, message: "Email can't editable." });
   }
-  const user = await User.findByIdAndUpdate(req.user.id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { ...req.body, file: files?.[0] },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
   res.status(200).json({ success: true, user });
 });
 

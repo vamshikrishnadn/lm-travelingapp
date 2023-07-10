@@ -66,6 +66,22 @@ const travelSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+  file: {
+    type: Object,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  status: {
+    type: String,
+    default: 'Active',
+    enum: ['Active', 'Deactivate', 'On Raid', 'Completed', 'Ride is full'],
+  },
+  occupiedSeats: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model('Travel', travelSchema);

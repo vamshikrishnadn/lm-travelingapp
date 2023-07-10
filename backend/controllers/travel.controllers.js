@@ -7,6 +7,7 @@ const moment = require('moment');
 const User = require('../models/user.model.js');
 
 exports.createTravel = catchAsyncErrors(async (req, res, next) => {
+  const files = req.files;
   const count = await Travel.count();
   const user = await User.findById(req.user._id);
   const travelId = user.name.substring(0, 4) + String(count + 1).padStart(3, '0');
@@ -14,6 +15,7 @@ exports.createTravel = catchAsyncErrors(async (req, res, next) => {
     ...req.body,
     travelId,
     createdBy: req.user._id,
+    file: files?.[0],
   });
 
   res.status(201).json({
@@ -24,11 +26,16 @@ exports.createTravel = catchAsyncErrors(async (req, res, next) => {
 
 exports.editTravel = catchAsyncErrors(async (req, res, next) => {
   const { id } = req.params;
-  const travel = await Travel.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+  const files = req.files;
+  const travel = await Travel.findByIdAndUpdate(
+    id,
+    { ...req.body, file: files?.[0] },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
 
   res.status(201).json({ success: true, payload: travel });
 });
@@ -60,9 +67,26 @@ exports.otherTravels = catchAsyncErrors(async (req, res, next) => {
   const travels = await Travel.find({
     createdBy: { $nin: [req.user._id] },
     travelDate: { $gte: moment().subtract(1, 'day').format() },
+    status: 'Active',
   })
     .populate('createdBy')
     .sort('travelDate');
+
+  res.status(201).json({ success: true, payload: travels });
+});
+
+exports.filterTravels = catchAsyncErrors(async (req, res, next) => {
+  const travels = await Travel.find({
+    createdBy: { $nin: [req.user._id] },
+    travelDate: { $gte: moment().subtract(1, 'day').format() },
+    status: 'Active',
+    ...req.body,
+    // travelDate: moment(req.body.travelDate + 'T00:00:00.000Z').format(),
+  })
+    .populate('createdBy')
+    .sort('travelDate');
+
+  // console.log('first', req.body.travelDate + 'T00:00:00.000Z');
 
   res.status(201).json({ success: true, payload: travels });
 });
@@ -109,6 +133,27 @@ exports.receivedRequests = catchAsyncErrors(async (req, res, next) => {
 });
 
 exports.updateStatusRequests = catchAsyncErrors(async (req, res, next) => {
+  const travel = await Travel.findById(req.body.travel);
+  console.log(
+    '🚀 ~ file: travel.controllers.js:121 ~ exports.updateStatusRequests=catchAsyncErrors ~ travel:',
+    travel
+  );
+  if (travel.occupiedSeats >= travel.travelMembersCount && req.body.status === 'Accept') {
+    return next(new ErrorHandler('Travel users reached the limit.', 401));
+  }
+  if (req.body.status === 'Accept') {
+    await Travel.findByIdAndUpdate(
+      req.body.travel,
+      {
+        occupiedSeats: travel.occupiedSeats + 1,
+      },
+      {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      }
+    );
+  }
   const request = await TravelRequests.findByIdAndUpdate(
     req.params.id,
     { ...req.body },
@@ -127,6 +172,15 @@ exports.getSingTravelRequest = catchAsyncErrors(async (req, res, next) => {
   }).populate('requestedBy requestedTo travel');
 
   res.status(200).json({ success: true, payload: request });
+});
+
+exports.getUsersInTravel = catchAsyncErrors(async (req, res, next) => {
+  const { id } = req.params;
+  const travel = await TravelRequests.find({ travel: id }).populate(
+    'requestedBy requestedTo travel'
+  );
+
+  res.status(201).json({ success: true, payload: travel });
 });
 
 exports.createTravelReview = catchAsyncErrors(async (req, res, next) => {
